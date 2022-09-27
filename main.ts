@@ -5,6 +5,7 @@ controller.down.onEvent(ControllerButtonEvent.Released, function () {
     music.footstep.play()
     menupdate = 1
     action = 1
+    led_pulse = 2
 })
 controller.up.onEvent(ControllerButtonEvent.Released, function () {
     music.knock.play()
@@ -14,6 +15,7 @@ controller.up.onEvent(ControllerButtonEvent.Released, function () {
         menuitem += 1
     }
     menupdate = 1
+    led_pulse = 2
 })
 function invisibleClock () {
     seconds.setDigitColor(0)
@@ -30,6 +32,7 @@ function displayClock () {
 let hourAdjust = 0
 let led_pulse = 0
 let menupdate = 0
+let userNAME = ""
 let ampm: SevenSegDigit = null
 let hours: DigitCounter = null
 let minutes: DigitCounter = null
@@ -38,14 +41,12 @@ let menuitem = 0
 let action = 0
 let hourFlag = 0
 let minuteFlag = 0
-let userNAME = "Jorge Garcia"
 action = 0
 scene.setBackgroundImage(assets.image`blank`)
 scene.setBackgroundColor(15)
 menuitem = 0
 let ALogo_WhiteOnBlack = assets.image`ALogo_WhiteOnBlack`
 let ALogo_BlackOnWhite = assets.image`ALogo_BlackOnWhite`
-let F360QR = assets.image`F360QR`
 let F360icon = assets.image`f360icon`
 let F360QR120 = assets.image`F360QR120`
 if (control.deviceDalVersion() != "sim") {
@@ -68,11 +69,16 @@ ampm.y += -8
 let textSprite = textsprite.create(userNAME, 0, 9)
 textSprite.setMaxFontHeight(10)
 textSprite.setPosition(79, 9)
-game.onUpdateInterval(2000, function () {
-    if (led_pulse >= 1) {
-        pins.LED.digitalWrite(true)
-    } else {
-        pins.LED.digitalWrite(false)
+game.onUpdateInterval(5000, function () {
+    led_pulse += -1
+    if (led_pulse == 0) {
+        led_pulse = 2
+        if (menuitem > 4) {
+            menuitem = 0
+        } else {
+            menuitem += 1
+        }
+        menupdate = 1
     }
 })
 game.onUpdateInterval(1000, function () {
@@ -98,19 +104,15 @@ game.onUpdateInterval(1000, function () {
 forever(function () {
     if (menupdate) {
         if (menuitem == 0) {
-            led_pulse = 1
             invisibleClock()
             scene.setBackgroundColor(15)
             scene.setBackgroundImage(assets.image`ALogo_WhiteOnBlack`)
-            story.printCharacterText(userNAME, "HELLO")
         } else if (menuitem == 1) {
             textSprite.destroy(effects.clouds, 200)
-            led_pulse = 1
             invisibleClock()
             scene.setBackgroundColor(15)
             scene.setBackgroundImage(assets.image`F360QR120`)
         } else if (menuitem == 2) {
-            led_pulse = 1
             scene.setBackgroundImage(assets.image`blank`)
             scene.setBackgroundColor(15)
             if (action) {
@@ -119,7 +121,6 @@ forever(function () {
             }
             displayClock()
         } else if (menuitem == 3) {
-            led_pulse = 1
             scene.setBackgroundImage(assets.image`blank`)
             scene.setBackgroundColor(15)
             if (action) {
@@ -131,7 +132,6 @@ forever(function () {
             invisibleClock()
             scene.setBackgroundColor(15)
             scene.setBackgroundImage(assets.image`f360icon90`)
-            led_pulse = 0
         } else {
         	
         }
