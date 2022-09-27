@@ -1,0 +1,34 @@
+{
+    "name": "EssentialNameBadge",
+    "description": "",
+    "dependencies": {
+        "device": "*",
+        "controller": "*",
+        "edge-connector": "*",
+        "sevenseg": "*",
+        "jacdac": "github:microsoft/pxt-jacdac#v1.8.35",
+        "Timers": "github:microsoft/arcade-timers#v1.1.0",
+        "feather": "*"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md",
+        "assets.json",
+        "images.g.jres",
+        "images.g.ts",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "1.10.7",
+        "targetId": "arcade"
+    },
+    "supportedTargets": [
+        "arcade"
+    ],
+    "preferredEditor": "blocksprj"
+}
