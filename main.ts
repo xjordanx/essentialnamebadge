@@ -2,10 +2,12 @@ namespace SpriteKind {
     export const marquee = SpriteKind.create()
 }
 controller.down.onEvent(ControllerButtonEvent.Released, function () {
+    music.footstep.play()
     menupdate = 1
     action = 1
 })
 controller.up.onEvent(ControllerButtonEvent.Released, function () {
+    music.knock.play()
     if (menuitem > 4) {
         menuitem = 0
     } else {
@@ -25,8 +27,8 @@ function displayClock () {
     hours.setDigitColor(5)
     ampm.setDigitColor(2)
 }
-let led_pulse = 0
 let hourAdjust = 0
+let led_pulse = 0
 let menupdate = 0
 let ampm: SevenSegDigit = null
 let hours: DigitCounter = null
@@ -66,6 +68,13 @@ ampm.y += -8
 let textSprite = textsprite.create(userNAME, 0, 9)
 textSprite.setMaxFontHeight(10)
 textSprite.setPosition(79, 9)
+game.onUpdateInterval(2000, function () {
+    if (led_pulse >= 1) {
+        pins.LED.digitalWrite(true)
+    } else {
+        pins.LED.digitalWrite(false)
+    }
+})
 game.onUpdateInterval(1000, function () {
     if (time >= 24 * 60 * 60) {
         time = 0
@@ -87,18 +96,13 @@ game.onUpdateInterval(1000, function () {
     time += 1
 })
 forever(function () {
-    if (led_pulse == 1) {
-        pins.D10.digitalWrite(true)
-        timer.after(200, function () {
-            pins.D10.digitalWrite(false)
-        })
-    }
     if (menupdate) {
         if (menuitem == 0) {
             led_pulse = 1
             invisibleClock()
             scene.setBackgroundColor(15)
             scene.setBackgroundImage(assets.image`ALogo_WhiteOnBlack`)
+            story.printCharacterText(userNAME, "HELLO")
         } else if (menuitem == 1) {
             textSprite.destroy(effects.clouds, 200)
             led_pulse = 1
@@ -110,7 +114,7 @@ forever(function () {
             scene.setBackgroundImage(assets.image`blank`)
             scene.setBackgroundColor(15)
             if (action) {
-                time += 360
+                time += 3600
                 action = 0
             }
             displayClock()
@@ -125,12 +129,11 @@ forever(function () {
             displayClock()
         } else if (menuitem == 4) {
             invisibleClock()
-            scene.setBackgroundImage(assets.image`blank`)
-            led_pulse = 0
-            pins.D9.digitalWrite(false)
             scene.setBackgroundColor(15)
+            scene.setBackgroundImage(assets.image`f360icon90`)
+            led_pulse = 0
         } else {
-            pins.D9.digitalWrite(true)
+        	
         }
         menupdate = 0
     }
