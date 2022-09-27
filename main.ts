@@ -1,15 +1,12 @@
 namespace SpriteKind {
     export const marquee = SpriteKind.create()
 }
-controller.right.onEvent(ControllerButtonEvent.Released, function () {
+controller.down.onEvent(ControllerButtonEvent.Released, function () {
     if (menuitem == 0) {
-        nameInit()
         led_pulse = 1
     } else if (menuitem == 1) {
-        invisibleName()
         led_pulse = 1
     } else if (menuitem == 2) {
-        nameInit()
         led_pulse = 1
         hours.count += 1
     } else if (menuitem == 3) {
@@ -20,7 +17,7 @@ controller.right.onEvent(ControllerButtonEvent.Released, function () {
     }
     menupdate = 1
 })
-controller.left.onEvent(ControllerButtonEvent.Released, function () {
+controller.up.onEvent(ControllerButtonEvent.Released, function () {
     if (menuitem >= 4) {
         menuitem = 0
     } else {
@@ -35,7 +32,7 @@ function invisibleClock () {
     ampm.setDigitColor(0)
 }
 function nameInit () {
-    textSprite = textsprite.create("Jorge Garcia")
+    textSprite = textsprite.create("Jorge Garcia", 0, 9)
     textSprite.setMaxFontHeight(10)
     textSprite.setBorder(2, 10, 1)
     textSprite.setPosition(80, 7)
@@ -47,9 +44,10 @@ function displayClock () {
     ampm.setDigitColor(2)
 }
 function invisibleName () {
+    textSprite = textsprite.create("Jorge Garcia", 0, 0)
+    textSprite.setBorder(0, 0, 0)
     scene.setBackgroundImage(assets.image`blank`)
     scene.setBackgroundColor(15)
-    textSprite.destroy()
 }
 let hourAdjust = 0
 let textSprite: TextSprite = null
@@ -112,10 +110,12 @@ forever(function () {
     if (menupdate) {
         if (menuitem == 0) {
             invisibleClock()
+            nameInit()
             scene.setBackgroundColor(15)
             scene.setBackgroundImage(assets.image`ALogo_WhiteOnBlack`)
         } else if (menuitem == 1) {
             invisibleClock()
+            invisibleName()
             scene.setBackgroundColor(15)
             scene.setBackgroundImage(assets.image`F360QR120`)
         } else if (menuitem == 2) {
