@@ -15,6 +15,12 @@ function invisibleClock () {
     hours.setDigitColor(0)
     ampm.setDigitColor(0)
 }
+function nameInit () {
+    textSprite = textsprite.create("Jorge Garcia")
+    textSprite.setMaxFontHeight(10)
+    textSprite.setBorder(2, 10, 1)
+    textSprite.setPosition(80, 105)
+}
 controller.B.onEvent(ControllerButtonEvent.Released, function () {
     if (menuitem == 0) {
         led_pulse = 1
@@ -40,6 +46,7 @@ function displayClock () {
 }
 let hourAdjust = 0
 let led_pulse = 0
+let textSprite: TextSprite = null
 let menupdate = 0
 let ampm: SevenSegDigit = null
 let hours: DigitCounter = null
@@ -58,6 +65,7 @@ if (control.deviceDalVersion() != "sim") {
     pins.P23.setPull(PinPullMode.PullDown)
     pins.P24.setPull(PinPullMode.PullDown)
 }
+nameInit()
 let hourFlag = 0
 let minuteFlag = 0
 let time = 248 * 60
@@ -112,7 +120,9 @@ forever(function () {
             scene.setBackgroundColor(15)
             displayClock()
         } else if (menuitem == 4) {
-        	
+            invisibleClock()
+            scene.setBackgroundImage(assets.image`blank`)
+            scene.setBackgroundColor(15)
         }
         menupdate = 0
         if (led_pulse) {
