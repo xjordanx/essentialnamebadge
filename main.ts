@@ -1,7 +1,26 @@
 namespace SpriteKind {
     export const marquee = SpriteKind.create()
 }
-controller.A.onEvent(ControllerButtonEvent.Released, function () {
+controller.right.onEvent(ControllerButtonEvent.Released, function () {
+    if (menuitem == 0) {
+        nameInit()
+        led_pulse = 1
+    } else if (menuitem == 1) {
+        invisibleName()
+        led_pulse = 1
+    } else if (menuitem == 2) {
+        nameInit()
+        led_pulse = 1
+        hours.count += 1
+    } else if (menuitem == 3) {
+        led_pulse = 1
+        minutes.count += 1
+    } else if (menuitem == 4) {
+        led_pulse = 0
+    }
+    menupdate = 1
+})
+controller.left.onEvent(ControllerButtonEvent.Released, function () {
     if (menuitem >= 4) {
         menuitem = 0
     } else {
@@ -19,40 +38,30 @@ function nameInit () {
     textSprite = textsprite.create("Jorge Garcia")
     textSprite.setMaxFontHeight(10)
     textSprite.setBorder(2, 10, 1)
-    textSprite.setPosition(80, 105)
+    textSprite.setPosition(80, 7)
 }
-controller.B.onEvent(ControllerButtonEvent.Released, function () {
-    if (menuitem == 0) {
-        led_pulse = 1
-    } else if (menuitem == 1) {
-        led_pulse = 1
-    } else if (menuitem == 2) {
-        led_pulse = 1
-        hours.count += 1
-    } else if (menuitem == 3) {
-        led_pulse = 1
-        minutes.count += 1
-    } else if (menuitem == 4) {
-        led_pulse = 0
-        pins.D10.digitalWrite(false)
-    }
-    menupdate = 1
-})
 function displayClock () {
     seconds.setDigitColor(7)
     minutes.setDigitColor(9)
     hours.setDigitColor(5)
     ampm.setDigitColor(2)
 }
+function invisibleName () {
+    scene.setBackgroundImage(assets.image`blank`)
+    scene.setBackgroundColor(15)
+    textSprite.destroy()
+}
 let hourAdjust = 0
-let led_pulse = 0
 let textSprite: TextSprite = null
 let menupdate = 0
+let led_pulse = 0
 let ampm: SevenSegDigit = null
 let hours: DigitCounter = null
 let minutes: DigitCounter = null
 let seconds: DigitCounter = null
 let menuitem = 0
+let minuteFlag = 0
+let hourFlag = 0
 scene.setBackgroundImage(assets.image`blank`)
 scene.setBackgroundColor(15)
 menuitem = 0
@@ -66,8 +75,6 @@ if (control.deviceDalVersion() != "sim") {
     pins.P24.setPull(PinPullMode.PullDown)
 }
 nameInit()
-let hourFlag = 0
-let minuteFlag = 0
 let time = 248 * 60
 seconds = sevenseg.createCounter(SegmentStyle.Thick, SegmentScale.Half, 2)
 minutes = sevenseg.createCounter(SegmentStyle.Thick, SegmentScale.Full, 2)
@@ -125,9 +132,9 @@ forever(function () {
             scene.setBackgroundColor(15)
         }
         menupdate = 0
-        if (led_pulse) {
+        if (led_pulse == 1) {
             pins.D10.digitalWrite(true)
-            timer.after(100, function () {
+            timer.after(200, function () {
                 pins.D10.digitalWrite(false)
             })
         }
