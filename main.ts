@@ -133,7 +133,9 @@ forever(function () {
             scene.setBackgroundColor(15)
             scene.setBackgroundImage(assets.image`f360icon90`)
         } else {
-        	
+            invisibleClock()
+            scene.setBackgroundColor(15)
+            scene.setBackgroundImage(assets.image`f360icon`)
         }
         menupdate = 0
     }
